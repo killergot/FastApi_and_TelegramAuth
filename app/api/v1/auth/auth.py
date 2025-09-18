@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import Request, HTTPException, APIRouter
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 import hashlib
@@ -7,8 +7,7 @@ import time
 
 BOT_TOKEN = "8351814758:AAH5h6fUO1rGMpSNN_uKEiMT3kdWSOASVr0"  # возьмите у @BotFather
 
-app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+router = APIRouter(prefix="/auth", tags=["auth"])
 
 def check_telegram_auth(data: dict) -> bool:
     """Проверка подлинности данных от Telegram"""
@@ -33,11 +32,7 @@ def check_telegram_auth(data: dict) -> bool:
 
     return True
 
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-@app.get("/auth/telegram")
+@router.get("/auth/telegram")
 async def telegram_auth(request: Request):
     data = dict(request.query_params)
 
