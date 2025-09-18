@@ -32,7 +32,7 @@ def check_telegram_auth(data: dict) -> bool:
 
     return True
 
-@router.get("/auth/telegram")
+@router.get("/telegram")
 async def telegram_auth(request: Request):
     data = dict(request.query_params)
 

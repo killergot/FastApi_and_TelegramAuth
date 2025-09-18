@@ -11,13 +11,13 @@
     <script async src="https://telegram.org/js/telegram-widget.js?22"
         data-telegram-login="home_HELLper_bot"
         data-size="large"
-        data-auth-url="http://localhost/v1/auth/auth/telegram"
         data-onauth="onTelegramAuth(user)">
     </script>
+    <!--     это если мне надо сделать переадресацию       data-auth-url="http://127.0.0.1/auth/telegram"-->
     <script>
     function onTelegramAuth(user) {
         console.log(user);
-        fetch("http://localhost/v1/auth/auth/telegram?" + new URLSearchParams(user))
+        fetch("http://127.0.0.1/v1/auth/telegram?" + new URLSearchParams(user))
             .then(r => r.json())
             .then(d => alert("Hello " + d.username));
     }
