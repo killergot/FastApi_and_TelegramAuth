@@ -19,7 +19,7 @@
         console.log(user);
         fetch("http://127.0.0.1/v1/auth/telegram?" + new URLSearchParams(user))
             .then(r => r.json())
-            .then(d => alert("Hello " + d.username));
+            .then(d => "Hello " + d.username);
     }
     </script>
 
