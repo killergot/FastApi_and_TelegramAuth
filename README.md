@@ -9,6 +9,7 @@
 - **PostgreSQL** — база данных
 - **Alembic** — миграции БД
 - **SQLalchemy** - ORM
+- **JWT токены** - access + refresh
 
 
 ## Быстрый старт
