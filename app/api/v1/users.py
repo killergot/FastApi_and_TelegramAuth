@@ -11,17 +11,17 @@ from app.shemas.users import UserOut, UserUpdateIn
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.get("/get_me", response_model=UserOut, status_code=status.HTTP_200_OK)
+@router.get("/me", response_model=UserOut, status_code=status.HTTP_200_OK)
 async def get_me(user = Depends(get_current_user)):
     return user
 
-@router.get("/get_user", response_model=UserOut, status_code=status.HTTP_200_OK,
+@router.get("/{user_id}", response_model=UserOut, status_code=status.HTTP_200_OK,
             dependencies=[Depends(get_current_user)])
 async def get_user_by_id(user_id: int,
                          user_service = Depends(get_user_service)):
     return await user_service.get_by_id(user_id)
 
-@router.get("/get_all", status_code=status.HTTP_200_OK,
+@router.get("/all", status_code=status.HTTP_200_OK,
             dependencies=[Depends(require_role(ADMIN_ROLE))])
 async def get_all_users(user_service: UserService = Depends(get_user_service)):
     return await user_service.get_all()
