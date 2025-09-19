@@ -51,7 +51,7 @@ async def get_current_user(
     payload: dict = Depends(get_access_token_payload),
     service: UserService = Depends(get_user_service)
 ) -> UserOut:
-    user: UserOut = await service.get_user_by_id(payload["id"])
+    user: UserOut = await service.get_by_id(payload["id"])
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="User not found")

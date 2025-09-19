@@ -19,12 +19,12 @@ async def get_me(user = Depends(get_current_user)):
             dependencies=[Depends(get_current_user)])
 async def get_user_by_id(user_id: int,
                          user_service = Depends(get_user_service)):
-    return await user_service.get_user_by_id(user_id)
+    return await user_service.get_by_id(user_id)
 
 @router.get("/get_all", status_code=status.HTTP_200_OK,
             dependencies=[Depends(require_role(ADMIN_ROLE))])
 async def get_all_users(user_service: UserService = Depends(get_user_service)):
-    return await user_service.get_all_users()
+    return await user_service.get_all()
 
 @router.put("/me", response_model=UserOut, status_code=status.HTTP_200_OK)
 async def update_user(new_user: UserUpdateIn,
@@ -37,4 +37,4 @@ async def update_user(new_user: UserUpdateIn,
                dependencies=[Depends(require_role(ADMIN_ROLE))])
 async def delete_user(user_id: int,
                       user_service: UserService = Depends(get_user_service)):
-    await user_service.del_user_by_id(user_id)
+    await user_service.del_by_id(user_id)
