@@ -16,7 +16,7 @@
 
 1. **Клонируйте репозиторий и перейдите в папку проекта:**
     ```bash
-    git clone <repo_url>
+    git clone https://github.com/killergot/FastApi_and_TelegramAuth
     cd HomeHelper/app
     ```
 

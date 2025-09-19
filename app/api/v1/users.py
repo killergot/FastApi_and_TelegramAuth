@@ -15,16 +15,16 @@ router = APIRouter(prefix="/users", tags=["users"])
 async def get_me(user = Depends(get_current_user)):
     return user
 
+@router.get("/all", status_code=status.HTTP_200_OK,
+            dependencies=[Depends(require_role(ADMIN_ROLE))])
+async def get_all_users(user_service: UserService = Depends(get_user_service)):
+    return await user_service.get_all()
+
 @router.get("/{user_id}", response_model=UserOut, status_code=status.HTTP_200_OK,
             dependencies=[Depends(get_current_user)])
 async def get_user_by_id(user_id: int,
                          user_service = Depends(get_user_service)):
     return await user_service.get_by_id(user_id)
-
-@router.get("/all", status_code=status.HTTP_200_OK,
-            dependencies=[Depends(require_role(ADMIN_ROLE))])
-async def get_all_users(user_service: UserService = Depends(get_user_service)):
-    return await user_service.get_all()
 
 @router.put("/me", response_model=UserOut, status_code=status.HTTP_200_OK)
 async def update_user(new_user: UserUpdateIn,
