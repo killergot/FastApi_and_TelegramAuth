@@ -16,7 +16,7 @@ class AuthService:
         self.repo = UserRepository(db)
         self.repo_session = UserSessionRepository(db)
 
-    async def login_telegram(self, user: UserLoginTelegramIn, response: Response):
+    async def login_telegram(self, user: UserLoginTelegramIn, response: Response) -> TokenOut:
         old_user = await self.repo.get_by_telegram(user.telegram_id)
 
         log.info('попытка создания пользователя')
@@ -47,7 +47,7 @@ class AuthService:
         return TokenOut(access_token=access_token, refresh_token=refresh_token)
 
 
-    async def refresh(self, payload: dict, token) -> TokenOut:
+    async def refresh(self, payload: dict, token: str) -> TokenOut:
         user_id = int(payload.get('sub'))
 
         user = await self.repo.get_with_sessions(user_id)

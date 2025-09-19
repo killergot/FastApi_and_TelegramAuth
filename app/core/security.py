@@ -2,8 +2,6 @@ from app.core.config import load_config
 from app.utils.jwt import encode_jwt, decode_jwt
 from datetime import datetime, timedelta
 
-
-
 config = load_config()
 
 SECRET_KEY = config.secret_keys.jwt

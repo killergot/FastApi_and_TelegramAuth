@@ -1,6 +1,6 @@
 import logging
 
-def init_log(level: int):
+def init_log(level: int) -> None:
     logging.basicConfig(
             level=level,  #(DEBUG, INFO, WARNING, ERROR, CRITICAL)
             format='[%(asctime)s] #%(levelname)-8s %(filename)s:'

@@ -5,7 +5,7 @@ import io
 
 from app.core.config import load_config, Config
 
-def get_s3_client(config: Config):
+def get_s3_client(config: Config) -> boto3.client:
     return boto3.client(
         's3',
         aws_access_key_id=config.s3.key_id,

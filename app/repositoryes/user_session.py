@@ -11,7 +11,7 @@ from app.core.except_handler import except_handler
 log = logging.getLogger(__name__)
 
 class UserSessionRepository(TemplateRepository):
-    async def get_all(self):
+    async def get_all(self) -> list[UserSession]:
         data = select(UserSession)
         users = await self.db.execute(data)
         return users.scalars().all()
@@ -19,8 +19,8 @@ class UserSessionRepository(TemplateRepository):
     async def get(self, session: UUID) -> Optional[UserSession]:
         return await self.db.get(UserSession, session)
 
-    async def create(self,user_id,
-                     token) -> UserSession:
+    async def create(self,user_id: int,
+                     token: str) -> UserSession:
         new_UserSession = UserSession(
             user_id=user_id,
             token=token,
@@ -32,7 +32,8 @@ class UserSessionRepository(TemplateRepository):
         return new_UserSession
 
     @except_handler
-    async def update(self, session, token: str):
+    async def update(self, session: UserSession,
+                     token: str) -> UserSession:
         session.token = token
         await self.db.commit()
         await self.db.refresh(session)

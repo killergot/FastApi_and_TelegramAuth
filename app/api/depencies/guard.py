@@ -1,3 +1,5 @@
+from typing import Callable, Awaitable
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
@@ -29,7 +31,7 @@ async def get_access_token_payload(
 
 async def get_refresh_token_payload(
     token: str = Depends(get_token_from_header),
-    service = Depends(get_user_service)
+    service: UserService = Depends(get_user_service)
 ) -> dict:
 
     payload = decode_refresh_token(token)
@@ -55,11 +57,11 @@ async def get_current_user(
                             detail="User not found")
     return user
 
-def require_role(req_role: int):
-    async def role_checker(payload: dict = Depends(get_access_token_payload)):
+def require_role(req_role: int) -> Callable[[dict[str, any]], Awaitable[dict[str, any]]]:
+    async def role_checker(payload: dict[str, any] = Depends(get_access_token_payload)) -> dict[str, any]:
         print(payload['role'])
         if not payload["role"] & req_role:
-            raise HTTPException(status_code=403,
-                                detail="Not enough permissions")
+            raise HTTPException(status_code=403, detail="Not enough permissions")
         return payload
+
     return role_checker

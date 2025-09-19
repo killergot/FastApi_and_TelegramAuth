@@ -20,7 +20,7 @@ class UserRepository(TemplateRepository):
         users = await self.db.execute(data)
         return users.scalars().all()
 
-    async def get_with_sessions(self,user_id:int):
+    async def get_with_sessions(self,user_id:int) -> Optional[User]:
         data = (select(User).
         where(User.id == user_id).
         options(
@@ -30,15 +30,15 @@ class UserRepository(TemplateRepository):
         user = users.scalars().first()
         return user
 
-    async def get_by_email(self, email: str):
+    async def get_by_email(self, email: str) -> Optional[User]:
         data = select(User).where(User.email == email)
         user = await self.db.execute(data)
         return user.scalars().first()
 
-    async def get_by_id(self, user_id: int):
+    async def get_by_id(self, user_id: int) -> Optional[User]:
         return await self.db.get(User, user_id)
 
-    async def get_by_telegram(self, telegram_id: int):
+    async def get_by_telegram(self, telegram_id: int) -> Optional[User]:
         data = select(User).where(User.telegram_id == telegram_id)
         user = await self.db.execute(data)
         return user.scalars().first()
@@ -66,7 +66,7 @@ class UserRepository(TemplateRepository):
         return new_user
 
     @except_handler
-    async def update(self,user_id: int, new_user: UserUpdateIn):
+    async def update(self,user_id: int, new_user: UserUpdateIn) -> User:
         user = await self.get_by_id(user_id)
         if new_user.telegram_id:
             user.telegram_id = new_user.telegram_id

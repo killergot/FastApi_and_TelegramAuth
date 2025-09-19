@@ -6,13 +6,13 @@ def get_key(secret: str):
 
 def encode_jwt(payload: dict,
             secret: str,
-            algorithm: str):
+            algorithm: str) -> str:
     header = {'alg': algorithm, 'typ': 'JWT'}
     token = jwt.encode(header, payload, get_key(secret)).decode('utf-8')
     return token
 
 def decode_jwt(token: str,
-               secret: str):
+               secret: str) -> dict | bool:
     try:
         claims = jwt.decode(token, get_key(secret))
         claims.validate()
