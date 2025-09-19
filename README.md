@@ -4,6 +4,7 @@
 
 ## Стек технологий
 
+- **python 3.13.3** - интерпретатор
 - **FastAPI** — backend-фреймворк
 - **PostgreSQL** — база данных
 - **Alembic** — миграции БД
@@ -23,6 +24,9 @@
 
 3. **Установите зависимости:**
     ```bash
+    # желательно сначала создать и войти в виртуальное окружение
+    # py -m venv .venv
+    # .venv/Script/activate
     pip install -r requirements.txt
     ```
 
@@ -34,6 +38,7 @@
 5. **Запустите приложение:**
     ```bash
     uvicorn main:app --reload --port=80
+    ## или python3 main.py --app-dir /app
     ```
 
 ## Структура проекта
