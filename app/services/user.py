@@ -2,13 +2,11 @@ from uuid import UUID
 
 from fastapi import  HTTPException, status
 
-from app.database.models.auth import UserSession
 from app.repositoryes.user import UserRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.repositoryes.user_session import UserSessionRepository
-from app.shemas.auth import UserOut, UserUpdateIn
-from app.utils.hash import get_hash
+from app.shemas.users import UserOut, UserUpdateIn
 from app.database import User
 
 
@@ -47,6 +45,10 @@ class UserService:
         result = [{'id': user.id, 'email': user.email, 'role': user.role} for user in users]
         return result
 
+    async def update(self, user: UserOut, update_data: UserUpdateIn):
+        user = await self.repo.update(user.id, update_data)
+        return UserOut.model_validate(user)
+
     async def del_user_by_id(self, id: int):
         _ = await self._get_user(id)
         if not await self.repo.delete(id):
@@ -68,3 +70,4 @@ class UserService:
         if not await self.repo_session.delete(session):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                 detail="Error deleting session")
+

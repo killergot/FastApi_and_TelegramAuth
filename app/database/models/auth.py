@@ -12,6 +12,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=True)
     password: Mapped[str] = mapped_column(Text, nullable=True)
     telegram_id: Mapped[int] = mapped_column(Integer, unique=True, nullable=False)
+    username: Mapped[str] = mapped_column(String(255), unique=False, nullable=False)
     first_name: Mapped[str] = mapped_column(String(255), nullable=False)
     last_name: Mapped[str] = mapped_column(String(255), nullable=False)
     photo_url: Mapped[str] = mapped_column(String(255), nullable=False)

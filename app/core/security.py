@@ -14,11 +14,13 @@ REFRESH_TOKEN_EXPIRE_SECONDS = 60 * 60 * 24 * 30  # 30 дней
 
 
 def create_access_token(user_id: int,
-                        user_telegram_id) -> str:
+                        user_telegram_id: int,
+                        user_role: int) -> str:
     expire = datetime.utcnow() + timedelta(seconds=ACCESS_TOKEN_EXPIRE_SECONDS)
     payload = {
         'id': user_id,
         'telegram_id': user_telegram_id,
+        'role': user_role,
         'exp': expire
     }
     return encode_jwt(payload, SECRET_KEY, ALGORITHM)

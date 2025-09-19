@@ -1,9 +1,14 @@
+import logging
+
 from fastapi import FastAPI, Request
 from app.api import router
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 import uvicorn
 
+from app.utils.logger import init_log
+
+init_log(logging.INFO)
 
 templates = Jinja2Templates(directory="templates")
 

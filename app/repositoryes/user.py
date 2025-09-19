@@ -10,6 +10,7 @@ from sqlalchemy.orm import selectinload
 from app.database.models.auth import User, UserSession
 from app.repositoryes.template import TemplateRepository
 from app.core.except_handler import except_handler
+from app.shemas.users import UserUpdateIn
 
 log = logging.getLogger(__name__)
 
@@ -46,6 +47,7 @@ class UserRepository(TemplateRepository):
                      first_name: str,
                      last_name: str,
                      photo_url: str,
+                     username: str,
                      email: Optional[str] = None,
                      password: Optional[str] = None,
                      role: int = 0) -> User:
@@ -55,6 +57,7 @@ class UserRepository(TemplateRepository):
                         telegram_id=telegram_id,
                         first_name=first_name,
                         last_name=last_name,
+                        username=username,
                         photo_url=photo_url)
         self.db.add(new_user)
         await self.db.commit()
@@ -63,8 +66,22 @@ class UserRepository(TemplateRepository):
         return new_user
 
     @except_handler
-    async def update(self, user: User, password: str):
-        user.password = password
+    async def update(self,user_id: int, new_user: UserUpdateIn):
+        user = await self.get_by_id(user_id)
+        if new_user.telegram_id:
+            user.telegram_id = new_user.telegram_id
+        if new_user.first_name:
+            user.first_name = new_user.first_name
+        if new_user.last_name:
+            user.last_name = new_user.last_name
+        if new_user.username:
+            user.username = new_user.username
+        if new_user.email:
+            user.email = new_user.email
+        if new_user.photo_url:
+            user.photo_url = new_user.photo_url
+
+
         await self.db.commit()
         await self.db.refresh(user)
         return user

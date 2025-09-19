@@ -1,40 +1,39 @@
-from fastapi import HTTPException, status, Depends, Response
-from fastapi.security import HTTPBearer
+import logging
 
+from fastapi import HTTPException, status, Depends, Response
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.repositoryes.user import UserRepository
 from app.repositoryes.user_session import UserSessionRepository
-from app.utils.hash import get_hash
 from app.core.security import create_access_token, create_refresh_token
-from app.shemas.auth import UserIn, UserOut, TokenOut, UserAuthTelegram, UserBase
+from app.shemas.auth import TokenOut, UserLoginTelegramIn
 
-from datetime import datetime, timedelta
-import ipaddress
+log = logging.getLogger(__name__)
 
 class AuthService:
     def __init__(self, db: AsyncSession):
         self.repo = UserRepository(db)
         self.repo_session = UserSessionRepository(db)
 
-    async def login_telegram(self, user: UserAuthTelegram, response: Response):
+    async def login_telegram(self, user: UserLoginTelegramIn, response: Response):
         old_user = await self.repo.get_by_telegram(user.telegram_id)
 
-        print('попытка создания пользователя')
+        log.info('попытка создания пользователя')
 
         if not old_user:
-            print('Пользователя нет')
+            log.info('Пользователя нет')
             user = await self.repo.create(
                 telegram_id=user.telegram_id,
                 first_name=user.first_name,
                 last_name=user.last_name,
-                photo_url=user.photo_url
+                photo_url=user.photo_url,
+                username=user.username,
             )
         else:
             user = old_user
 
-        access_token = create_access_token(user.id, user.telegram_id)
+        access_token = create_access_token(user.id, user.telegram_id,user.role)
         refresh_token = create_refresh_token(user.id)
 
         await self.repo_session.create(user.id,refresh_token)
@@ -56,7 +55,7 @@ class AuthService:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail="User not found")
 
-        access_token = create_access_token(user.id, user.telegram_id)
+        access_token = create_access_token(user.id, user.telegram_id,user.role)
         refresh_token = create_refresh_token(user.id)
 
         for i in user.sessions:
