@@ -19,4 +19,5 @@ app.include_router(router)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-uvicorn.run(app, port=80)
+if __name__ == "__main__":
+    uvicorn.run(app, port=80)

@@ -6,7 +6,10 @@ import time
 def check_telegram_auth(data: dict, BOT_TOKEN: str) -> bool:
     """Проверка подлинности данных от Telegram"""
     auth_data = data.copy()
-    hash_ = auth_data.pop("hash")
+    try:
+        hash_ = auth_data.pop("hash")
+    except KeyError:
+        return False
 
     # Сортируем ключи и собираем строку
     data_check_string = "\n".join([f"{k}={v}" for k, v in sorted(auth_data.items())])
