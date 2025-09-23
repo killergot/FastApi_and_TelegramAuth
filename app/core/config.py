@@ -35,6 +35,7 @@ class Config:
     secret_keys: SecretKeys
     bot: Telebot
     s3: S3
+    MODE: str
 
 
 def load_config(path: Optional[str] = None) -> Config:
@@ -55,4 +56,5 @@ def load_config(path: Optional[str] = None) -> Config:
                         secret=env('AWS_SECRET_ACCESS_KEY'),
                         region=env('AWS_REGION'),
                         bucket_name=env('S3_BUCKET_NAME'),
-                        endpoint=env('S3_ENDPOINT_URL')))
+                        endpoint=env('S3_ENDPOINT_URL')),
+                  MODE=env('MODE'))
