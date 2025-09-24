@@ -39,7 +39,7 @@ async def get_refresh_token_payload(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Invalid refresh token payload")
 
-    sessions = await service.get_sessions(int(payload["sub"]))
+    sessions = await service.get_sessions(payload["sub"])
     for i in sessions:
         if i.token == token:
             return payload

@@ -26,7 +26,7 @@ def create_access_token(user_id: int,
 def create_refresh_token(user_id: int) -> str:
     expire = datetime.utcnow() + timedelta(seconds=REFRESH_TOKEN_EXPIRE_SECONDS)
     payload = {
-        'sub': str(user_id),
+        'sub': user_id,
         'exp': expire
     }
     return encode_jwt(payload, REFRESH_SECRET_KEY, ALGORITHM)

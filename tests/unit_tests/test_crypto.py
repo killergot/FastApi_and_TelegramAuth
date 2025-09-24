@@ -1,4 +1,3 @@
-import pytest
 from app.utils.hash import get_hash
 
 def test_get_hash_consistency():
